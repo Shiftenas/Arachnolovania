@@ -30,7 +30,7 @@ function Update()
     if spawntimer == 40 then
         warn.remove()
     end
-    if spawntimer > 40  and spawntimer % 20 == 0 then
+    if spawntimer > 40 and spawntimer < 350 and spawntimer % 20 == 0 then
         local c_spider = CreateProjectileAbs("cute_spider1", 600, 55)
         c_spider.sprite.Scale(2, 2)
         c_spider.SetVar("hurt", true)
@@ -41,7 +41,7 @@ function Update()
         table.insert(cute_spiders, c_spider)
     end
 
-    if spawntimer > 180 and spawntimer % 60 == 0 then
+    if spawntimer >= 180 and spawntimer < 350 and spawntimer % 60 == 0 then
         local croissant = CreateProjectileAbs("croissant", 0, math.random(150, 350))
         croissant.SetVar("rotation", 10)
         croissant.SetVar("velx", 15)
@@ -50,7 +50,7 @@ function Update()
         table.insert(l_croissants, croissant)
     end
 
-    if spawntimer > 180 and spawntimer % 60 == 30 then
+    if spawntimer > 180 and spawntimer < 350 and spawntimer % 60 == 30 then
         local croissant = CreateProjectileAbs("croissant", 640, math.random(150, 350))
         croissant.SetVar("rotation", -10)
         croissant.SetVar("velx", -15)
