@@ -18,7 +18,6 @@ canspare = false
 cancheck = false
 gave_up = false
 dialogue = 0
-dialogue = 17
 musictimer = 0 
 secondphase = false
 
@@ -153,14 +152,14 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none]A great person,[w:3] who\njust want his\nfriend's hapiness.",
                 "[noskip][voice:muffet_voice][effect:none]So,[w:3] put this weapon\ndown,[w:3] and...",
                 "[noskip][voice:muffet_voice][effect:none]And I'll let you\nrestart everything.",
-                "[noskip][voice:muffet_voice][effect:none]Because I'm sure\nthat you can make\nit better for\neveryone."
+                "[noskip][voice:muffet_voice][effect:none][func:SetSprite, ironic_muffet]Because I'm sure\nthat you can make\nit better for\neveryone."
             }
             comments = {"Muffet lets you a chance."}
             dialogue = 8.5
         elseif dialogue == 8.5 then
             currentdialogue = {"[noskip][voice:muffet_voice][effect:none]..."}
         elseif dialogue == 9 then
-            omments = {"Smells like spider webs.", "The music is intense.", "[color:ff0000]Determination.","You feel spiders crawling on\ryour back."}
+            comments = {"Smells like spider webs.", "The music is intense.", "[color:ff0000]Determination.","You feel spiders crawling on\ryour back."}
             currentdialogue = {
                 "[noskip][voice:muffet_voice][effect:none][func:SetSprite, muffet]So,[w:3] it's like that,[w:3]\nhuh ?",
                 "[noskip][voice:muffet_voice][effect:none]Well,[w:3] [func:SetSprite, angry_muffet][color:d535d9]you asked for\nit."
@@ -238,7 +237,6 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9].....",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]Unless ?"
             }
-            currentdialogue = {"f"}
             Encounter["nextwaves"] = {"final_attack"}
             dialogue = 18
         elseif dialogue == 18 then

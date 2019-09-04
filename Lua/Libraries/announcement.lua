@@ -2,7 +2,7 @@ file = "announcement/"
 sign = nil
 
 SetGlobal("symbols", {})
-SetGlobal("projectile_symbols", {})
+projectile_symbols = {}
 SetGlobal("signactive", false)
 SetGlobal("timer", 0)
 
@@ -18,10 +18,10 @@ function HideSign()
     if GetGlobal("timer") > 87 then
         SetGlobal("timer", 87)
     end
-    local projectile_symbols = GetGlobal("projectile_symbols")
 
     for i=1,#projectile_symbols do
-        projectile_symbols[i].remove()
+        projectile_symbols[1].remove()
+        table.remove(projectile_symbols, 1)
     end
 end
 
@@ -29,10 +29,9 @@ function UpdateSign()
     local timer = GetGlobal("timer")
     local signactive = GetGlobal("signactive")
     local symbols = GetGlobal("symbols")
-    local projectile_symbols = {}
-    startx = 440 - (20 - 2.9 * (#symbols - 1)) * (#symbols - 1)
 
     if signactive then
+        startx = 440 - (20 - 2.9 * (#symbols - 1)) * (#symbols - 1)
         if timer == 0 then 
             hold_spider = CreateProjectileAbs(file.."cute_spider1", 640, 240)
             hold_spider.sprite.Scale(2,2)
@@ -64,13 +63,13 @@ function UpdateSign()
             end
             upnext = CreateProjectileAbs(file.."up_next",440,330)
             table.insert(projectile_symbols, upnext)
-            SetGlobal("projectile_symbols",projectile_symbols)
         end
-    elseif timer > 0 then
+    elseif timer != nil and timer > 0 then
         timer = timer - 1
         if timer == 80 then    
             for i=1,#projectile_symbols do
-                projectile_symbols[i].remove()
+                projectile_symbols[1].remove()
+                table.remove(projectile_symbols, 1)
             end
             sign.sprite.set("announcement/sign4")
         elseif timer == 75 then

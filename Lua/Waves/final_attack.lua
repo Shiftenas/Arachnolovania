@@ -12,7 +12,7 @@ r_croissants = {}
 blasters = {}
 lasers = {}
 
-spawntimer = 1239
+spawntimer = 0
 blastertimer = 0
 blaster_y = 0
 blaster_x = 0

@@ -129,6 +129,7 @@ function Update()
     if spawnwavetimer == 350 then
         RemoveHorizontal()
         ReleaseCupcake()
+        SetFallSpeed(1.5)
         Arena.ResizeImmediate(20, 20)
     end
     if spawnwavetimer >= 350 then
@@ -145,10 +146,10 @@ function Update()
         end
     end
     for i=1, #spiders_phase_1 do
-        spiders_phase_1[i].Move(-5, 0)
+        spiders_phase_1[i].Move(-7, 0)
     end
     for i=1, #spiders_phase_2 do
-        MoveProjectile(spiders_phase_2[i], spiders_phase_2[i].GetVar("velx")*2, -1)
+        MoveProjectile(spiders_phase_2[i], spiders_phase_2[i].GetVar("velx")*2, -1.5)
         if spiders_phase_2[i].GetVar("truex") >= 116 then
             spiders_phase_2[i].SetVar("velx", -1)
         end
@@ -220,9 +221,9 @@ function Update()
         blasterr.remove()
     end
     if spawnwavetimer > 460 and spawnwavetimer < 543 then
-        MoveProjectile(blasterr, 0, -1)
+        MoveProjectile(blasterr, 0, -1.5)
         if spawnwavetimer > 515 then
-            MoveProjectile(laserr, 0, -1)
+            MoveProjectile(laserr, 0, -1.5)
         end
     end
     if spawnwavetimer == 543 then

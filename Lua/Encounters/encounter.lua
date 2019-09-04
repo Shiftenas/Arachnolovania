@@ -30,7 +30,6 @@ enemypositions = {
 -- A custom list with attacks to choose from. Actual selection happens in EnemyDialogueEnding(). Put here in case you want to use it.
 
 function EncounterStarting()
-    SetHidders()
     if Misc.FileExists("Others/name.txt") then
         namefile = Misc.OpenFile("Others/name.txt")
         Player.name = namefile.ReadLine(1)
