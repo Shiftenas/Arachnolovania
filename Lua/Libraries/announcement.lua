@@ -13,21 +13,15 @@ function ApplySign(waves)
 end
 
 function HideSign()
-    local projectile_symbols = GetGlobal("projectile_symbols")
-
-    for i=1,#projectile_symbols do
-        projectile_symbols[i].remove()
-    end
-
-    --if sign != nil then
-    --    sign.remove()
-    --    sign = nil
-    --end
-
     SetGlobal("signactive",false)
     SetGlobal("projectile_symbols", {})
     if GetGlobal("timer") > 87 then
         SetGlobal("timer", 87)
+    end
+    local projectile_symbols = GetGlobal("projectile_symbols")
+
+    for i=1,#projectile_symbols do
+        projectile_symbols[i].remove()
     end
 end
 

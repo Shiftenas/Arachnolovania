@@ -25,11 +25,14 @@ secondphase = false
 -- Happens after the slash animation but before 
 function HandleAttack(attackstatus)
     if attackstatus == -1 then
-        -- player pressed fight but didn't press Z afterwards
+        Encounter["final_fight"] = false
     else
         if dialogue == 8.5 then
             Audio.Stop()
             dialogue = 9
+        end
+        if dialogue == 18 then
+            SetDamage(0)
         end
     end
 end
@@ -145,7 +148,7 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none]You're not going\nto stop,[w:3] are you ?",
                 "[noskip][voice:muffet_voice][effect:none]...",
                 "[noskip][voice:muffet_voice][effect:none]So listen...",
-                "[noskip][voice:muffet_voice][effect:none][func:StartChoice]I know somewhere,[w:3]\nperhaps in your\nheart...",
+                "[noskip][voice:muffet_voice][effect:none][func:SetSprite, sad_muffet][func:StartChoice]I know somewhere,[w:3]\nperhaps in your\nheart...",
                 "[noskip][voice:muffet_voice][effect:none]There is a great\nperson.",
                 "[noskip][voice:muffet_voice][effect:none]A great person,[w:3] who\njust want his\nfriend's hapiness.",
                 "[noskip][voice:muffet_voice][effect:none]So,[w:3] put this weapon\ndown,[w:3] and...",
@@ -159,8 +162,8 @@ function EnemyDialogueStarting()
         elseif dialogue == 9 then
             omments = {"Smells like spider webs.", "The music is intense.", "[color:ff0000]Determination.","You feel spiders crawling on\ryour back."}
             currentdialogue = {
-                "[noskip][voice:muffet_voice][effect:none]So,[w:3] it's like that,[w:3]\nhuh ?",
-                "[noskip][voice:muffet_voice][effect:none]Well,[w:3] [func:ChangeSprite][color:d535d9]you asked for\nit."
+                "[noskip][voice:muffet_voice][effect:none][func:SetSprite, muffet]So,[w:3] it's like that,[w:3]\nhuh ?",
+                "[noskip][voice:muffet_voice][effect:none]Well,[w:3] [func:SetSprite, angry_muffet][color:d535d9]you asked for\nit."
             }
             secondphase = true
             Encounter["signs"] = {"spider", "spider"}
@@ -220,7 +223,7 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]Not bad.[w:3] Not bad\nat all.",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]But, be aware of\nmy [color:ff0000]special attack[color:d535d9].",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]...",
-                "[noskip][voice:muffet_voice][effect:none][color:d535d9][func:FirstSprite]That sounds better\nwhen he says it."
+                "[noskip][voice:muffet_voice][effect:none][color:d535d9][func:SetSprite, ironic_muffet]That sounds better\nwhen he says it.[func:SetSprite, angry_muffet][skip]"
             }
             dialogue = 17
             comments = {"What's happenning ?"}
@@ -235,10 +238,27 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9].....",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]Unless ?"
             }
-            currentdialogue = {
-                "F"
-            }
+            currentdialogue = {"f"}
             Encounter["nextwaves"] = {"final_attack"}
+            dialogue = 18
+        elseif dialogue == 18 then
+            Audio.Stop()
+            currentdialogue = {
+                "[noskip][voice:muffet_voice][effect:none][func:SetSprite, sad_muffet]No...",
+                "[noskip][voice:muffet_voice][effect:none]I can't do that like\nthat.",
+                "[noskip][voice:muffet_voice][effect:none]That's cheating...",
+                "[noskip][voice:muffet_voice][effect:none]It would be at your\nlevel.",
+                "[noskip][voice:muffet_voice][effect:none]I'm not like you.",
+                "[noskip][voice:muffet_voice][effect:none]And I'll never be..."
+            }
+            SetDamage(0)
+            dialogue = 19
+        elseif dialogue == 19 then
+            Audio.Stop()
+            currentdialogue = {
+                "[noskip][voice:muffet_voice][effect:none]..."
+            }
+            SetDamage(0)
         end
     else 
         Audio.Stop()
@@ -246,9 +266,9 @@ function EnemyDialogueStarting()
             "[noskip][voice:muffet_voice][effect:none]You stop ?",
             "[noskip][voice:muffet_voice][effect:none]It's too\ndifficult ?",
             "[noskip][voice:muffet_voice][effect:none]...",
-            "[noskip][voice:muffet_voice][effect:none][func:FirstSprite]It's too bad...",
+            "[noskip][voice:muffet_voice][effect:none][func:SetSprite, sad_muffet]It's too bad...",
             "[noskip][voice:muffet_voice][effect:none]You should\nhave stop from\nthe very\nbeginning...",
-            "[noskip][voice:muffet_voice][effect:none][color:ff0000]But my pet is\ngoing to enjoy his\nmeal."
+            "[noskip][voice:muffet_voice][effect:none][func:SetSprite, ironic_muffet][color:ff0000]But my pet is\ngoing to enjoy his\nmeal."
         }
         Encounter["nextwaves"] = {"death"}
         Encounter["wavetimer"] = 10000.0

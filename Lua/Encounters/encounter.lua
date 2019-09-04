@@ -10,7 +10,14 @@ nextwaves = {"start_attack"}
 wavetimer = 100.0
 actualhp = 20
 signs = {"spider"}
-arenasize = {240, 130}
+arenasize = {575, 130}
+final_fight = false
+final_state = false
+final_timer = 0
+final_flash = CreateSprite("flash", "Top")
+final_flash.x = 320
+final_flash.y = 240
+final_flash.alpha = 0
 said = false
 enemies = {
 "muffet"
@@ -23,6 +30,7 @@ enemypositions = {
 -- A custom list with attacks to choose from. Actual selection happens in EnemyDialogueEnding(). Put here in case you want to use it.
 
 function EncounterStarting()
+    SetHidders()
     if Misc.FileExists("Others/name.txt") then
         namefile = Misc.OpenFile("Others/name.txt")
         Player.name = namefile.ReadLine(1)
@@ -40,8 +48,13 @@ function EncounterStarting()
 end
 
 function Update()
-    UpdateBar()
-    UpdateSign()
+    if final_fight and Input.GetKey("Z") == 1 then
+        ActiveFinalState()
+    else
+        UpdateFinalState()
+        UpdateBar()
+        UpdateSign()
+    end
 end
 
 function EnemyDialogueStarting()
@@ -200,12 +213,16 @@ function KillPlayer()
     Player.hp = 0
 end
 
+function DoSetHidders()
+    SetHidders()
+end
+
 function EnteringState(newstate, oldstate)
     if (oldstate == "ITEMMENU" or oldstate == "ACTMENU" or oldstate == "MERCYMENU" or oldstate == "ENEMYSELECT") and newstate != "ACTIONSELECT" and newstate != "ENEMYSELECT" and newstate != "ACTMENU" then
         HideSign()
     end
 
-    if oldstate == "ENEMYDIALOGUE" then
+    if oldstate == "ENEMYDIALOGUE" and enemies[1]["dialogue"] != 19 then
         State("DEFENDING")
     end
 
@@ -227,7 +244,7 @@ function EnteringState(newstate, oldstate)
         enemies[1].Call("ContinueMusic")
     end
 
-    if newstate == "ACTIONSELECT" and (oldstate == "DEFENDING" or oldstate == "ENEMYDIALOGUE") and enemies[1]["dialogue"] != 2 then
+    if newstate == "ACTIONSELECT" and (oldstate == "DEFENDING" or oldstate == "ENEMYDIALOGUE") and enemies[1]["dialogue"] != 2 and enemies[1]["dialogue"] != 18 then
         ApplySign(signs)
     end
 
@@ -256,8 +273,21 @@ function EnteringState(newstate, oldstate)
         SetHidders()
     end
 
-    if newstate == "DEFENDING" and enemies[1]["dialogue"] == 18 then
+    if oldstate == "ENEMYDIALOGUE" and enemies[1]["dialogue"] == 19 and not enemies[1]["gave_up"] then
+        State("ACTIONSELECT")
+    end
+
+    if oldstate == "DEFENDING" and enemies[1]["dialogue"] == 18 then
+        State("ENEMYDIALOGUE")
+        SetHidders()
+    end
+
+    if newstate == "DEFENDING" and enemies[1]["dialogue"] == 19 then
         ByeHidders()
+    end
+
+    if oldstate == "ENEMYSELECT" and newstate == "ATTACKING" and enemies[1]["dialogue"] == 19 then
+        final_fight = true
     end
 end
 
@@ -265,4 +295,28 @@ end
 
 function GiveUp()
     gave_up = true
+end
+
+function ActiveFinalState()
+    final_state = true
+end
+
+function UpdateFinalState()
+    if final_state then
+        final_timer = final_timer + 1
+        if final_timer <= 30 then
+            final_flash.alpha = final_timer / 30
+        elseif final_timer == 60 then
+            Audio.PlaySound("hitsound")
+            final_flash.alpha = 0
+            local someone = CreateSprite("someone", "BelowBullet")
+            someone.y = 340
+            enemies[1].Call("SetSprite","grounded")
+        elseif final_timer == 65 then
+            final_flash.color = {0, 0, 0, 1}
+        elseif final_timer == 100 then
+            HideSign()
+            State("DONE")
+        end
+    end
 end

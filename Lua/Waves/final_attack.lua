@@ -1,22 +1,34 @@
 require "karma"
 
 Player.SetControlOverride(true)
-Arena.Move(0, 500, false, true)
+Arena.ResizeImmediate(16, 16)
+final_hidder = CreateSprite("arena_final_hidder", "BelowPlayer")
+final_hidder.x = Arena.x
+final_hidder.y = Arena.y + Arena.height/2
 
-spiders = {}
 cute_spiders = {}
 l_croissants = {}
 r_croissants = {}
-spawntimer = 0
+blasters = {}
+lasers = {}
+
+spawntimer = 1239
 blastertimer = 0
 blaster_y = 0
+blaster_x = 0
 blaster = nil
 active_blaster = false
+
+flash = CreateSprite("flash", "Top")
+flash.x = 320
+flash.y = 240
+flash.alpha = 0
 
 function Update()
     UpdatePlayer()
     UpdateBlaster()
-    if Player.absy > 400 then
+    UpdateCreatedBlasters()
+    if Player.absy > 400 and spawntimer < 390 then
         active_blaster = true
     end
     spawntimer = spawntimer + 1
@@ -57,6 +69,35 @@ function Update()
         croissant.SetVar("vely", 8)
         croissant.SetVar("hurt", true)
         table.insert(r_croissants, croissant)
+    end
+
+    if spawntimer > 400 and spawntimer < 640 and spawntimer%30 == 0 then
+        SpawnBlaster()
+    end
+
+    if spawntimer == 640 then
+        cupcake = CreateProjectileAbs("cupcake/cupcake1", 10, 240)
+        cupcake.ppcollision = true
+        cupcake.sprite.Scale(2, 2)
+        cupcake.sprite.rotation = -90
+        cupcake.SetVar("iscupcake", true)
+        local x = 660
+        local starty = 8
+        spiders = CreateProjectileAbs("spider_wall", 1000, 240)
+        spiders.SetVar("hurt", true)
+    end
+
+    if spawntimer > 640 and spawntimer < 1240 then
+        spiders.Move(-1, 0)
+        if spawntimer % 80 == 0 then
+            cupcake.sprite.Set("cupcake/cupcake1")
+        elseif spawntimer % 80 == 20 then
+            cupcake.sprite.Set("cupcake/cupcake2")
+        elseif spawntimer % 80 == 40 then
+            cupcake.sprite.Set("cupcake/cupcake3")
+        elseif spawntimer % 80 == 60 then
+            cupcake.sprite.Set("cupcake/cupcake4")
+        end
     end
 
     for i=1, #cute_spiders do
@@ -107,18 +148,26 @@ function Update()
         croissant.SetVar("velx", velx + 0.25)
         croissant.SetVar("vely", vely - 0.2)
     end
+
+    if spawntimer == 1250 then
+        Arena.ResizeImmediate(575, 130)
+        final_hidder.remove()
+        Encounter.Call("DoSetHidders")
+        EndWave()
+    end
 end
 
 function UpdateBlaster()
     if active_blaster then
         if blastertimer == 0 then
             blaster_y = Player.absy
-        end
-        local blaster_x = 520
-        if Player.absx > 320 then
-            blaster_x = 120
+            blaster_x = 520
+            if Player.absx > 320 then
+                blaster_x = 120
+            end
         end
         if blastertimer == 8 then
+            Audio.PlaySound("charging_blaster")
             blaster = CreateProjectileAbs("blasters/0", blaster_x, blaster_y)
             if blaster_x == 120 then
                 blaster.sprite.rotation = 90
@@ -132,14 +181,21 @@ function UpdateBlaster()
         if blastertimer == 16 then
             blaster.sprite.Set("blasters/2")
         end
+        if blastertimer > 18 and blastertimer <= 20 then
+            flash.alpha = flash.alpha + 0.5
+        end
         if blastertimer == 20 then
             blaster.sprite.Set("blasters/3")
             local laser_x = -170
             if blaster_x == 120 then
                 laser_x = 810
             end
+            Audio.PlaySound("echo")
             laser = CreateProjectileAbs("laser/0", laser_x, blaster_y)
             laser.SetVar("hurt", true)
+        end
+        if blastertimer > 20 and blastertimer <= 30 then
+            flash.alpha = flash.alpha - 0.1
         end
         if blastertimer > 20 and blastertimer < 50 and (blastertimer-20)%3 == 0 then
             laser.sprite.Set("laser/"..(blastertimer-20)/3)
@@ -161,6 +217,136 @@ function UpdateBlaster()
             blastertimer = 0
             active_blaster = false
         end
+    end
+end
+
+function SpawnBlaster()
+    local bx = math.random(120, 300)
+    local by = math.random(100, 200)
+    if math.random() > 0.5 then
+        bx = 320 - bx
+    else
+        bx = 320 + bx
+    end
+    if math.random() > 0.5 then
+        by = 240 - by
+    else
+        by = 240 + by
+    end
+    local dist = math.sqrt((Player.absx - bx)^2 + (Player.absy - by)^2)
+    local x = Player.absx - bx
+    local y = Player.absy - by
+    local angle = 0
+    if dist != 0 then
+        dist = math.sqrt(x * x + y * y)
+        angle = math.asin(y/dist)
+    end
+
+    local blaster = CreateProjectileAbs("blasters/0", bx + 900 * math.cos(angle), by + 900 * math.sin(angle))
+    if x < 0 then
+        blaster.sprite.rotation = -angle / math.pi * 180 - 90
+    else
+        blaster.sprite.rotation = angle / math.pi * 180 + 90
+    end
+    if x < 0 then
+        blaster.SetVar("angle", -angle)
+    else
+        blaster.SetVar("angle", angle)
+    end
+    blaster.SetVar("bx", bx) 
+    blaster.SetVar("localx", x)
+    blaster.SetVar("by", by)
+    blaster.SetVar("timer", 0)
+    table.insert(blasters, blaster)
+end
+
+function UpdateCreatedBlasters()
+    for i=1, #blasters do
+        local blaster = blasters[i]
+        local timer = blaster.GetVar("timer") + 1
+        local x = blaster.GetVar("localx")
+        local bx = blaster.GetVar("bx")
+        local by = blaster.GetVar("by")
+        local angle = blaster.GetVar("angle")
+        if timer <= 45 then
+            if x < 0 then
+                blaster.MoveToAbs(
+                    bx + (900 - 20*timer) * math.cos(angle),
+                    by + (900 - 20*timer) * math.sin(angle)
+                )
+            else
+                blaster.MoveToAbs(
+                    bx - (900 - 20*timer) * math.cos(angle),
+                    by - (900 - 20*timer) * math.sin(angle)
+                )
+            end
+        elseif timer == 48 then
+            blaster.sprite.Set("blasters/1")
+        elseif timer == 51 then
+            blaster.sprite.Set("blasters/2")
+        elseif timer == 54 then
+            blaster.sprite.Set("blasters/3")
+            local multiplier = 690
+            if x < 0 then
+                multiplier = - 690
+            end
+            local laser = CreateProjectileAbs("laser/0", bx + multiplier * math.cos(angle), by + multiplier * math.sin(angle))
+            laser.ppcollision = true
+            laser.sprite.rotation = angle / math.pi * 180
+            laser.SetVar("hurt", true)
+            laser.SetVar("timer", 0)
+            laser.SetVar("x", x)
+            laser.SetVar("angle", angle)
+            table.insert(lasers, laser)
+        end
+        if timer > 54 and timer < 62 then
+            if x > 0 then
+                blaster.Move(
+                    -20 * math.cos(angle),
+                    -20 * math.sin(angle)
+                )
+            else
+                blaster.Move(
+                    20 * math.cos(angle),
+                    20 * math.sin(angle)
+                )
+            end
+        elseif timer == 65 then
+            blaster.remove()
+        end
+        blaster.SetVar("bx", bx)
+        blaster.SetVar("by", by)
+        blaster.SetVar("angle", angle)
+        blaster.SetVar("timer", timer)
+    end
+
+    for i=1, #lasers do
+        local laser = lasers[i]
+        local timer = laser.GetVar("timer") + 1
+        local angle = laser.GetVar("angle")
+        local x = laser.GetVar("x")
+        if laser.isactive then
+            if timer % 4 == 0 then
+                laser.sprite.Set("laser/"..timer/4)
+            end
+            if timer < 10 then
+                if x > 0 then
+                    laser.Move(
+                        -20 * math.cos(angle),
+                        -20 * math.sin(angle)
+                    )
+                else
+                    laser.Move(
+                        20 * math.cos(angle),
+                        20 * math.sin(angle)
+                    )
+                end
+            end
+            if timer == 39 then
+                laser.remove()
+            end
+        end
+        laser.SetVar("timer", timer)
     end
 end
 
@@ -195,7 +381,9 @@ function UpdatePlayer()
 end
 
 function OnHit(bullet)
-    if bullet.GetVar("hurt") then
+    if bullet.GetVar("iscupcake") then
+        Player.hp = 0
+    elseif bullet.GetVar("hurt") then
         KarmaHurt()
     end
 end
