@@ -222,7 +222,7 @@ function EnemyDialogueStarting()
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]Not bad.[w:3] Not bad\nat all.",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]But, be aware of\nmy [color:ff0000]special attack[color:d535d9].",
                 "[noskip][voice:muffet_voice][effect:none][color:d535d9]...",
-                "[noskip][voice:muffet_voice][effect:none][color:d535d9][func:SetSprite, ironic_muffet]That sounds better\nwhen he says it.[func:SetSprite, angry_muffet][skip]"
+                "[noskip][voice:muffet_voice][effect:none][color:d535d9][func:SetSprite, ironic_muffet]That sounds better\nwhen he says it.[func:SetSprite, angry_muffet][next]"
             }
             dialogue = 17
             comments = {"What's happenning ?"}

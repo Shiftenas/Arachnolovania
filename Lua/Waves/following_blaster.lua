@@ -92,6 +92,6 @@ end
 
 function OnHit(bullet)
     if bullet.GetVar("hurt") then
-        --KarmaHurt()
+        KarmaHurt()
     end
 end
