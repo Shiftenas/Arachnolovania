@@ -1,6 +1,7 @@
 file = "special_attack/"
 Encounter["arenasize"] = {575, 130}
 Arena.ResizeImmediate(575, 130)
+Player.sprite.color = {1, 0, 0}
 
 hidder = CreateSprite("flash", "Top")
 hidder.x = 320

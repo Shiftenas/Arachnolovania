@@ -108,7 +108,7 @@ function HandleItem(ItemID)
     if ItemID == "G.FLOWER" then
         BattleDialog({
             "[noskip]You ate the Golden Flower.\nYou remember the one that\ryou killed to get it.",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]You don't regret this, do you ?[w:3]\nWhy would we be there\rotherwise ?",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]You don't regret this, do you ?[w:3]\nWhy would we be there\rotherwise ?",
             "[noskip]Anyways, you are [func:HealKarma, 92]healed up."
         })
     end
@@ -116,8 +116,8 @@ function HandleItem(ItemID)
     if ItemID == "I.NOODLES" then
         BattleDialog({
             "[noskip]They're better dry.\nYou're [func:HealKarma, 92]healed up.",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]Alphys was a great help. I'm\ralmost sad for her.",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]I insist on \"almost\"."
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]Alphys was a great help. I'm\ralmost sad for her.",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]I insist on \"almost\"."
         })
     end
 
@@ -130,7 +130,7 @@ function HandleItem(ItemID)
         end
         BattleDialog({
             first_text,
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]This robot was pathetic.[w:3] At\rleast he made great food."
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]This robot was pathetic.[w:3] At\rleast he made great food."
         })
     end
 
@@ -143,7 +143,7 @@ function HandleItem(ItemID)
         end
         local text = {first_text}
         if not said then
-            table.insert(text, "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]Ironic,[w:3] isn't it ?")
+            table.insert(text, "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]Ironic,[w:3] isn't it ?")
             said = true
         end
         BattleDialog(text)
@@ -158,7 +158,7 @@ function HandleItem(ItemID)
         end
         local text = {first_text}
         if not said then
-            table.insert(text, "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]Ironic,[w:3] isn't it ?")
+            table.insert(text, "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]Ironic,[w:3] isn't it ?")
             said = true
         end
         BattleDialog(text)
@@ -168,31 +168,31 @@ function HandleItem(ItemID)
         text = {
             "[noskip]You ate Toriel's Pie.\nYou're hea[func:StopMusic][w:5].[w:5].[w:5].",
             "[noskip]You start to remember\rsomething...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]What are you doing ?",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]What are you doing ?",
             "[noskip][func:SadMusic]The warm of the Pie makes you\rremember of her...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]Don't waste our time !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]Don't waste our time !",
             "[voice:monsterfont][noskip]I remember her...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]"..Player.name.." ! Stop it !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]"..Player.name.." ! Stop it !",
             "[voice:monsterfont][noskip]I... I can't...",
             "[voice:toriel_voice][noskip]It's not too late, my child...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]They're dead ! You don't need\rthem !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]They're dead ! You don't need\rthem !",
             "[voice:monsterfont][noskip]I'm sorry...",
             "[voice:v_papyrus][noskip]IT'S OKAY HUMAN ! WE FORGIVE\rYOU !",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]JUST KILL HER !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]JUST KILL HER !",
             "[voice:v_sans][noskip]you know what you have to do,[w:3]\rkiddo.",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]DON'T HEAR THEM ! KILL HER !\rWE ARE TOO CLOSE !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]DON'T HEAR THEM ! KILL HER !\rWE ARE TOO CLOSE !",
             "[voice:v_fluffybuns][noskip]You can give up, it's ok.",
             "[voice:alphys_voice][noskip]M-mettaton, c-calm down...[w:3] B-but\ryes, we...[w:3] We trust you...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]DON'T ! HEAR ! THEM !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]DON'T ! HEAR ! THEM !",
             "[voice:undyne_voice][noskip]Come again punk,[w:3] Toriel misses\ryou.",
             "[voice:v_fluffybuns][noskip]All of us miss you.",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2]WE ARE ON THE VERGE OF\rGREATNESS !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000]WE ARE ON THE VERGE OF\rGREATNESS !",
             "[voice:v_asriel][noskip]We miss you "..Player.name.."... A lot...",
             "[voice:monsterfont][noskip]My friends...",
-            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][waitall:2][func:StopMusic]You killed them ALL ! They\rAREN'T your friends ANYMORE !",
+            "[voice:creepy_voice][noskip][color:ff0000][starcolor:ff0000][func:StopMusic]You killed them ALL ! They\rAREN'T your friends ANYMORE !",
             "[voice:monsterfont][noskip][waitall:3]See you soon[w:5].[w:5].[w:5].[w:8]",
             "[noskip]You feel a hole in your heart.\nYou hate this sensation, it's\rworse than loneliness.",
-            "[noskip][waitall:2]Something cold go through your\rbody.[w:9][func:KillPlayer]"
+            "[noskip]Something cold go through your\rbody.[w:9][func:KillPlayer]"
         }
         nexttext = "[noskip]Knock em down darling~"
         nexttext = MettatonVoice(nexttext)
