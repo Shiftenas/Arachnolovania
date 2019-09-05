@@ -11,6 +11,7 @@ wavetimer = 100.0
 actualhp = 20
 signs = {"spider"}
 arenasize = {575, 130}
+fleesuccess = false
 final_fight = false
 final_state = false
 final_timer = 0
